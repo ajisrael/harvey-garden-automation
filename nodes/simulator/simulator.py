@@ -39,6 +39,10 @@ shutdown = asyncio.Event()
 schemas = {}
 
 
+def log(event: str, **kwargs):
+    print(json.dumps({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "event": event, **kwargs}), flush=True)
+
+
 def load_schemas():
     names = ["login-request", "telemetry-request"]
     for name in names:
@@ -57,10 +61,6 @@ def validate_payload(schema_name: str, payload: dict) -> bool:
         log("schema_validation_error", schema=schema_name, errors=[e.message for e in errors])
         return False
     return True
-
-
-def log(event: str, **kwargs):
-    print(json.dumps({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "event": event, **kwargs}), flush=True)
 
 
 def auth_headers() -> dict:

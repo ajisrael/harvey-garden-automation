@@ -1,5 +1,5 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+import { use, should as chaiShould } from 'chai';
+import chaiHttp, { request } from 'chai-http';
 import server from '../../../src/server.js';
 import { resetDB } from '../../../src/seeder.js';
 import {
@@ -9,8 +9,8 @@ import {
 } from '../../utilities/testHelper.js';
 import pumpStateData from '../../../src/data/pumpStateData.js';
 
-const should = chai.should();
-chai.use(chaiHttp);
+const should = chaiShould();
+use(chaiHttp);
 
 const url = '/api/v1/pumpState/data';
 
@@ -41,8 +41,7 @@ describe('Pump State Controller and Routes', () => {
 
   describe(`GET ${url}`, () => {
     it('should get all pump state data', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .get(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .end((err, res) => {
@@ -56,8 +55,7 @@ describe('Pump State Controller and Routes', () => {
 
     it('should get pump state data by id', (done) => {
       const componentId = pumpStateData[0].componentId;
-      chai
-        .request(server)
+      request.execute(server)
         .get(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send({ componentId: componentId })

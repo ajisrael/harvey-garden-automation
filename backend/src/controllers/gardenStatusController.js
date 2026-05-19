@@ -8,8 +8,9 @@ import {
 // @route   GET /api/v1/gardenStatus/data
 // @access  Private
 const getData = (req, res) => {
-  if (req.body.bedId) {
-    const bedId = req.body.bedId;
+  const body = req.body || {};
+  if (body.bedId) {
+    const bedId = body.bedId;
     console.log(`Returning garden status data for bed ${bedId}`);
     const payload = getGardenStatusDataById(bedId);
     res.json(payload);

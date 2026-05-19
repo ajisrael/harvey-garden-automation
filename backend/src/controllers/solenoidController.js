@@ -7,8 +7,9 @@ import {
 // @route   GET /api/v1/solenoidState/data
 // @access  Private
 const getData = (req, res) => {
-  if (req.body.componentId) {
-    const componentId = req.body.componentId;
+  const body = req.body || {};
+  if (body.componentId) {
+    const componentId = body.componentId;
     console.log(`Returning solenoid state data for component ${componentId}`);
     const payload = getSolenoidStateDataById(componentId);
     res.json(payload);

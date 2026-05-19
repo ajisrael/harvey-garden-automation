@@ -1,5 +1,5 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+import { use, should as chaiShould } from 'chai';
+import chaiHttp, { request } from 'chai-http';
 import server from '../../../src/server.js';
 import { resetDB } from '../../../src/seeder.js';
 import {
@@ -10,8 +10,8 @@ import {
 import gardenBedData from '../../../src/data/gardenBedData.js';
 import serverConfig from '../../../src/config/serverConfig.js';
 
-const should = chai.should();
-chai.use(chaiHttp);
+const should = chaiShould();
+use(chaiHttp);
 
 const url = '/api/v1/gardenBed/data';
 
@@ -49,8 +49,7 @@ describe('gardenBedController & gardenBedRoutes', () => {
         gardenBedData.length,
         serverConfig.listPerPage
       );
-      chai
-        .request(server)
+      request.execute(server)
         .get(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .end((err, res) => {
@@ -74,8 +73,7 @@ describe('gardenBedController & gardenBedRoutes', () => {
         filteredGardenBedData.length,
         serverConfig.listPerPage
       );
-      chai
-        .request(server)
+      request.execute(server)
         .get(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send({ bedId: gardenBedData[0].bedId })
@@ -104,8 +102,7 @@ describe('gardenBedController & gardenBedRoutes', () => {
     };
 
     it('should save garden bed data', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(gardenBedData)

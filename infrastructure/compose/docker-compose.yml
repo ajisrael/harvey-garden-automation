@@ -9,9 +9,25 @@ services:
       - "5000:5000"
     env_file:
       - ../../backend/.env
+    environment:
+      - DB_PATH=/app/data/harvey.db
     volumes:
       - harvey-db:/app/data
     depends_on: []
+
+  backend-test:
+    build:
+      context: ../../backend
+      dockerfile: ../infrastructure/docker/backend.dev.Dockerfile
+    env_file:
+      - ../../backend/.env
+    environment:
+      - NODE_ENV=test
+      - DB_PATH=/app/data/harvey.db
+    volumes:
+      - backend-test-db:/app/data
+    profiles:
+      - test
 
   node-simulator:
     build:
@@ -31,5 +47,6 @@ services:
 
 volumes:
   harvey-db:
+  backend-test-db:
   mosquitto-data:
   mosquitto-log:

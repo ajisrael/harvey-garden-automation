@@ -15,8 +15,9 @@ import {
 // @access  Private
 const getData = (req, res) => {
   const page = req.query.page ? req.query.page : 1;
-  if (req.body.bedId) {
-    const bedId = req.body.bedId;
+  const body = req.body || {};
+  if (body.bedId) {
+    const bedId = body.bedId;
     console.log(`Returning garden bed data for bed ${bedId}`);
     const payload = getGardenBedDataById(page, bedId);
     res.json(payload);

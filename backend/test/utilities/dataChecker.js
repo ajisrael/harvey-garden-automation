@@ -1,6 +1,6 @@
-import chai from 'chai';
+import { should as chaiShould } from 'chai';
 
-const should = chai.should();
+const should = chaiShould();
 
 const checkNewlyRegisteredUserData = (data, user) => {
   data.name.should.be.a('string');

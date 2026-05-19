@@ -10,13 +10,14 @@ import {
 // @access  Private
 const getData = (req, res) => {
   const page = req.query.page ? req.query.page : 1;
-  if (req.body.actionId) {
-    const actionId = req.body.actionId;
+  const body = req.body || {};
+  if (body.actionId) {
+    const actionId = body.actionId;
     console.log(`Returning action data for action ${actionId}`);
     const payload = getActionDataById(actionId);
     res.json(payload);
-  } else if (req.body.actionName) {
-    const actionName = req.body.actionName;
+  } else if (body.actionName) {
+    const actionName = body.actionName;
     console.log(`Returning action data for action ${actionName}`);
     const payload = getActionDataByName(actionName);
     res.json(payload);

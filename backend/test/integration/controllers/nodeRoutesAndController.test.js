@@ -1,5 +1,5 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+import { use, should as chaiShould } from 'chai';
+import chaiHttp, { request } from 'chai-http';
 import server from '../../../src/server.js';
 import { resetDB } from '../../../src/seeder.js';
 import {
@@ -9,8 +9,8 @@ import {
 } from '../../utilities/testHelper.js';
 import nodeConfig from '../../../src/config/nodeConfig.js';
 
-const should = chai.should();
-chai.use(chaiHttp);
+const should = chaiShould();
+use(chaiHttp);
 
 const url = '/api/v1/node/:nodeId/config';
 
@@ -38,8 +38,7 @@ describe('Node Controller and Routes', () => {
   describe(`GET ${url}`, () => {
     Object.keys(nodeConfig).forEach((nodeId) => {
       it(`should get node config for id: ${nodeId}`, (done) => {
-        chai
-          .request(server)
+        request.execute(server)
           .get(url.replace(':nodeId', nodeId))
           .set('Authorization', `Bearer ${getStandardUserToken()}`)
           .end((err, res) => {

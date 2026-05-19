@@ -1,5 +1,5 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+import { use, should as chaiShould } from 'chai';
+import chaiHttp, { request } from 'chai-http';
 import server from '../../../src/server.js';
 import { resetDB } from '../../../src/seeder.js';
 import {
@@ -9,8 +9,8 @@ import {
 } from '../../utilities/testHelper.js';
 import actionData from '../../../src/data/actionData.js';
 
-const should = chai.should();
-chai.use(chaiHttp);
+const should = chaiShould();
+use(chaiHttp);
 
 describe('actionsController & actionsRoutes', () => {
   before((done) => {
@@ -27,8 +27,7 @@ describe('actionsController & actionsRoutes', () => {
   describe('GET /api/v1/actions/data', () => {
     let action = {};
     it('should get all the actions', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .get('/api/v1/actions/data')
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .end((err, res) => {
@@ -44,8 +43,7 @@ describe('actionsController & actionsRoutes', () => {
         });
     });
     it('should get an action by ID', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .get('/api/v1/actions/data')
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send({ actionId: action.id })
@@ -72,8 +70,7 @@ describe('actionsController & actionsRoutes', () => {
     };
 
     it('should save an action', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .post('/api/v1/actions/data')
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(action)

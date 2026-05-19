@@ -1,5 +1,5 @@
 import { equal } from 'assert';
-import chai from 'chai';
+import { should as chaiShould } from 'chai';
 import { resetDB } from '../../../src/seeder.js';
 import { stubLogs, restoreLogs } from '../../utilities/testHelper.js';
 import actionData from '../../../src/data/actionData.js';
@@ -11,7 +11,7 @@ import {
 } from '../../../src/services/actionsHelper.js';
 import serverConfig from '../../../src/config/serverConfig.js';
 
-const should = chai.should();
+const should = chaiShould();
 
 describe('actionsHelper', () => {
   beforeEach((done) => {

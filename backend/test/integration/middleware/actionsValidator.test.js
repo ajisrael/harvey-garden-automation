@@ -1,5 +1,5 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+import { use, should as chaiShould } from 'chai';
+import chaiHttp, { request } from 'chai-http';
 import server from '../../../src/server.js';
 import { resetDB } from '../../../src/seeder.js';
 import {
@@ -10,8 +10,8 @@ import {
 import actionData from '../../../src/data/actionData.js';
 import { checkValidationResponse } from '../../utilities/dataChecker.js';
 
-const should = chai.should();
-chai.use(chaiHttp);
+const should = chaiShould();
+use(chaiHttp);
 
 const url = '/api/v1/actions/data';
 
@@ -29,8 +29,7 @@ describe('actionsValidator', () => {
 
   describe('validateActionGet', () => {
     it('should NOT get an action when actionID is missing on a request with a body', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .get(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send({ notAnActionID: 'Not an action id' })
@@ -42,8 +41,7 @@ describe('actionsValidator', () => {
     });
 
     it('should NOT get an action when actionID is not a number', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .get(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send({ actionId: 'Not an action id' })
@@ -57,8 +55,7 @@ describe('actionsValidator', () => {
 
   describe('validateActionPost', () => {
     it('should NOT post an action when body is empty', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send({})
@@ -72,8 +69,7 @@ describe('actionsValidator', () => {
     it('should NOT post an action when bedIds is empty', (done) => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.bedIds;
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -88,8 +84,7 @@ describe('actionsValidator', () => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.bedIds;
       newAction.bedIds = 'Not an array';
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -104,8 +99,7 @@ describe('actionsValidator', () => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.bedIds;
       newAction.bedIds = [];
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -132,8 +126,7 @@ describe('actionsValidator', () => {
         'a',
         'string',
       ];
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -150,8 +143,7 @@ describe('actionsValidator', () => {
     it('should NOT post an action when actionCompleted is empty', (done) => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.actionCompleted;
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -166,8 +158,7 @@ describe('actionsValidator', () => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.actionCompleted;
       newAction.actionCompleted = 'not a number';
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -181,8 +172,7 @@ describe('actionsValidator', () => {
     it('should NOT post an action when actionCompletedType is empty', (done) => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.actionCompletedType;
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -197,8 +187,7 @@ describe('actionsValidator', () => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.actionCompletedType;
       newAction.actionCompletedType = 1;
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -215,8 +204,7 @@ describe('actionsValidator', () => {
     it('should NOT post an action when actionName is empty', (done) => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.actionName;
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -231,8 +219,7 @@ describe('actionsValidator', () => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.actionName;
       newAction.actionName = 1;
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -246,8 +233,7 @@ describe('actionsValidator', () => {
     it('should NOT post an action when actionType is empty', (done) => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.actionType;
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)
@@ -262,8 +248,7 @@ describe('actionsValidator', () => {
       const newAction = Object.assign({}, actionData[0]);
       delete newAction.actionType;
       newAction.actionType = 1;
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(newAction)

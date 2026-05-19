@@ -1,5 +1,5 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+import { use, should as chaiShould } from 'chai';
+import chaiHttp, { request } from 'chai-http';
 import server from '../../../src/server.js';
 import { resetDB } from '../../../src/seeder.js';
 import {
@@ -15,8 +15,8 @@ import {
 } from '../../utilities/dataChecker.js';
 import { testUser } from '../../data/userTestData.js';
 
-const should = chai.should();
-chai.use(chaiHttp);
+const should = chaiShould();
+use(chaiHttp);
 
 const url = '/api/v1/users';
 
@@ -44,8 +44,7 @@ describe('userController & userRoutes', () => {
       const email = standardUser.email;
       const password = standardUser.password;
 
-      chai
-        .request(server)
+      request.execute(server)
         .post(`${url}/login`)
         .send({ email, password })
         .end((err, res) => {
@@ -63,8 +62,7 @@ describe('userController & userRoutes', () => {
         return entry.isAdmin !== 0;
       });
 
-      chai
-        .request(server)
+      request.execute(server)
         .post(`${url}/login`)
         .send({ email: adminUsers[0].email, password: adminUsers[0].password })
         .end((err, res) => {
@@ -79,8 +77,7 @@ describe('userController & userRoutes', () => {
 
   describe(`POST ${url}`, () => {
     it('should register a new user when logged in as admin', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getAdminUserToken()}`)
         .send(testUser)
@@ -93,8 +90,7 @@ describe('userController & userRoutes', () => {
     });
 
     it('should NOT register a new user when logged in as a standard user', (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send(testUser)
@@ -111,8 +107,7 @@ describe('userController & userRoutes', () => {
     it('should NOT register a new user user already exists', (done) => {
       const existingUser = Object.assign({}, users[0]);
       delete existingUser.isAdmin;
-      chai
-        .request(server)
+      request.execute(server)
         .post(url)
         .set('Authorization', `Bearer ${getAdminUserToken()}`)
         .send(existingUser)

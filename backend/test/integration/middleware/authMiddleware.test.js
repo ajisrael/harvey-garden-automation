@@ -1,5 +1,5 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+import { use, should as chaiShould } from 'chai';
+import chaiHttp, { request } from 'chai-http';
 import server from '../../../src/server.js';
 import { resetDB } from '../../../src/seeder.js';
 import {
@@ -10,8 +10,8 @@ import {
 import { checkValidationResponse } from '../../utilities/dataChecker.js';
 import generateToken from '../../../src/utilities/generateToken.js';
 
-const should = chai.should();
-chai.use(chaiHttp);
+const should = chaiShould();
+use(chaiHttp);
 
 const url = '/api/v1/actions/data';
 
@@ -29,8 +29,7 @@ describe('authMiddleware', () => {
 
   describe('protect', () => {
     it(`should STOP a request when missing a token`, (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .get(url)
         .send()
         .end((err, res) => {
@@ -40,8 +39,7 @@ describe('authMiddleware', () => {
         });
     });
     it(`should STOP a request when using an incorrectly formatted token`, (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .get(url)
         .set('Authorization', 'Bearer incorrectlyFormattedToken')
         .send()
@@ -52,8 +50,7 @@ describe('authMiddleware', () => {
         });
     });
     it(`should STOP a request when using an invalid token`, (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .get(url)
         .set('Authorization', `Bearer ${generateToken('notAnId')}`)
         .send()
@@ -70,8 +67,7 @@ describe('authMiddleware', () => {
 
   describe('admin', () => {
     it(`should STOP a request when user is not an admin`, (done) => {
-      chai
-        .request(server)
+      request.execute(server)
         .post('/api/v1/users')
         .set('Authorization', `Bearer ${getStandardUserToken()}`)
         .send()

@@ -1,4 +1,4 @@
-import chai from 'chai';
+import { should as chaiShould } from 'chai';
 import bedToPumpConfig from '../../../src/config/bedToPumpConfig.js';
 import { gardenStatusSaveSuccess } from '../../../src/constants/messages.js';
 import gardenBedData from '../../../src/data/gardenBedData.js';
@@ -14,7 +14,7 @@ import {
 } from '../../../src/services/gardenStatusHelper.js';
 import { stubLogs, restoreLogs } from '../../utilities/testHelper.js';
 
-const should = chai.should();
+const should = chaiShould();
 
 describe('gardenStatusHelper', () => {
   beforeEach((done) => {

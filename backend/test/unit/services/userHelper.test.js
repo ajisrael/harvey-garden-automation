@@ -1,4 +1,4 @@
-import chai from 'chai';
+import { should as chaiShould } from 'chai';
 import { resetDB } from '../../../src/seeder.js';
 import { stubLogs, restoreLogs } from '../../utilities/testHelper.js';
 import { removeSqlFields } from '../../utilities/dataCleaner.js';
@@ -22,7 +22,7 @@ import {
 } from '../../../src/services/userHelper.js';
 import { testUser } from '../../data/userTestData.js';
 
-const should = chai.should();
+const should = chaiShould();
 
 describe('userHelper', () => {
   beforeEach((done) => {

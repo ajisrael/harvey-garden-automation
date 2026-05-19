@@ -61,9 +61,10 @@ function validateBedIds(bedIds, messages) {
 
 function validateActionGet(req, res, next) {
   let messages = [];
+  const body = req.body || {};
 
-  if (Object.keys(req.body).length !== 0) {
-    validateActionId(req.body.actionId, messages);
+  if (Object.keys(body).length !== 0) {
+    validateActionId(body.actionId, messages);
   }
 
   throwErrorWithMessagesOrCallNext(messages, res, next);
@@ -71,15 +72,16 @@ function validateActionGet(req, res, next) {
 
 function validateActionPost(req, res, next) {
   let messages = [];
+  const body = req.body || {};
 
-  if (Object.keys(req.body).length === 0) {
+  if (Object.keys(body).length === 0) {
     messages.push('body required for request');
   } else {
-    validateActionCompleted(req.body.actionCompleted, messages);
-    validateActionCompletedType(req.body.actionCompletedType, messages);
-    validateActionName(req.body.actionName, messages);
-    validateActionType(req.body.actionType, messages);
-    validateBedIds(req.body.bedIds, messages);
+    validateActionCompleted(body.actionCompleted, messages);
+    validateActionCompletedType(body.actionCompletedType, messages);
+    validateActionName(body.actionName, messages);
+    validateActionType(body.actionType, messages);
+    validateBedIds(body.bedIds, messages);
   }
 
   throwErrorWithMessagesOrCallNext(messages, res, next);

@@ -45,7 +45,7 @@ import {
   saveUserData,
 } from './services/userHelper.js';
 
-const db = new sqlite(path.resolve('harvey.db'));
+const db = new sqlite(path.resolve(process.env.DB_PATH || 'harvey.db'));
 
 const tryToCreateTable = (createTableFunction, tableName) => {
   try {
@@ -90,11 +90,9 @@ const importData = () => {
   calculateBedAverages().forEach((entry) => saveGardenStatusData(entry));
 };
 
-const resetDB = (setup = false) => {
+const resetDB = () => {
+  tryToCreateTables();
   deleteData();
-  if (setup) {
-    tryToCreateTables();
-  }
   importData();
 };
 

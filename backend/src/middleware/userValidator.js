@@ -38,12 +38,13 @@ function validatePassword(password, messages) {
 
 function validateLoginData(req, res, next) {
   let messages = [];
+  const body = req.body || {};
 
-  if (Object.keys(req.body).length === 0) {
+  if (Object.keys(body).length === 0) {
     messages.push('body required for request');
   } else {
-    validateEmail(req.body.email, messages);
-    validatePassword(req.body.password, messages);
+    validateEmail(body.email, messages);
+    validatePassword(body.password, messages);
   }
 
   throwErrorWithMessagesOrCallNext(messages, res, next);
@@ -51,13 +52,14 @@ function validateLoginData(req, res, next) {
 
 function validateRegistrationData(req, res, next) {
   let messages = [];
+  const body = req.body || {};
 
-  if (Object.keys(req.body).length === 0 || !req.body) {
+  if (Object.keys(body).length === 0) {
     messages.push('body required for request');
   } else {
-    validateEmail(req.body.email, messages);
-    validateName(req.body.name, messages);
-    validatePassword(req.body.password, messages);
+    validateEmail(body.email, messages);
+    validateName(body.name, messages);
+    validatePassword(body.password, messages);
   }
 
   throwErrorWithMessagesOrCallNext(messages, res, next);

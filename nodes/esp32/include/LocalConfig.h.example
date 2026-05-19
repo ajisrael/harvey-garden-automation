@@ -1,0 +1,8 @@
+// Copy this file to LocalConfig.h and fill in your values.
+// LocalConfig.h is gitignored — never commit it.
+
+const char* ssid         = "your-wifi-ssid";
+const char* wifiPassword = "your-wifi-password";
+const String serverName  = "http://192.168.1.100:5000";
+const String loginEmail  = "node@harvey.local";
+const String loginPassword = "change-me";

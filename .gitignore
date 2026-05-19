@@ -1,0 +1,27 @@
+# Environment files — never commit secrets
+**/.env
+
+# SQLite databases
+*.db
+
+# Node.js
+node_modules/
+
+# OS / editor
+.DS_Store
+.idea/
+*.swp
+*.swo
+
+# PlatformIO build artifacts
+.pio/
+nodes/esp32/.pio/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+nodes/simulator/.venv/
+
+# Firmware secrets
+nodes/esp32/include/LocalConfig.h

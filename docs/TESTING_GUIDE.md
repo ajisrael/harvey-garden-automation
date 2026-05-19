@@ -14,7 +14,7 @@ Run the full Mocha suite inside a container:
 docker compose -f infrastructure/compose/docker-compose.yml --profile test run --rm backend-test
 ```
 
-> Note: always use `-f infrastructure/compose/docker-compose.yml` — the root symlink does not resolve `env_file` paths correctly.
+> Note: always use the explicit `-f infrastructure/compose/docker-compose.yml` path — do not rely on a root-level symlink.
 
 Run a specific test suite by route:
 
@@ -89,7 +89,7 @@ docker compose -f infrastructure/compose/docker-compose.yml down -v
 
 ### Prerequisites
 
-The simulator authenticates as `node@harvey.local`. Seed the database before starting the stack:
+The simulator authenticates as `node@harvey.io`. Seed the database before starting the stack:
 
 ```bash
 # Inside the backend container (if already running):
@@ -183,3 +183,30 @@ docker run --rm -v $(pwd)/nodes/esp32:/workspace harvey-esp32-build pio run
 ```
 
 A successful compile prints `[SUCCESS]` for the `esp32dev` environment. `LocalConfig.h` is gitignored — copy the example file before running so the build can find it.
+
+---
+
+## CI (GitHub Actions)
+
+The workflow at `.github/workflows/ci.yml` runs on every push to `main` or `develop` and on all pull requests.
+
+**Jobs:**
+
+| Job | What it does |
+|---|---|
+| `Backend Tests` | Builds `infrastructure/docker/backend.dev.Dockerfile`, runs the full Mocha suite inside the container |
+| `Firmware Compile Check` | Builds `nodes/esp32/Dockerfile`, copies `LocalConfig.h.example` → `LocalConfig.h`, runs `pio run` |
+
+Both jobs run on `ubuntu-latest` and require no secrets or credentials.
+
+**Reading a run:** open the Actions tab on GitHub, select the workflow run, and expand the failing job's steps. A red `Run tests` step means at least one Mocha assertion failed — the step output shows the full Mocha report. A red `Compile firmware` step means a C++ compile error — the step output contains the PlatformIO error log.
+
+The simulator integration test (`scripts/test-integration.sh`) is not run in CI — it requires a seeded database and takes too long for every PR. Run it manually before merging changes that touch the simulator or backend API.
+
+---
+
+## Hardware-in-the-Loop (HIL)
+
+To validate the firmware on a real ESP32 device, see [`docs/FLASHING_GUIDE.md`](FLASHING_GUIDE.md).
+
+That guide covers: configuring `LocalConfig.h`, compiling and flashing via PlatformIO, monitoring serial output, and confirming telemetry reaches the backend.

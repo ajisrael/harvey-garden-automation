@@ -142,8 +142,44 @@ docker compose -f infrastructure/compose/docker-compose.yml exec backend \
 docker compose -f infrastructure/compose/docker-compose.yml down -v
 ```
 
+For a fully automated version of this flow, see [Automated Integration Test](#automated-integration-test) below.
+
+---
+
+## Automated Integration Test
+
+Runs the full stack end-to-end, seeds the database, drives the simulator for 30 seconds, and asserts that telemetry records were stored in the backend.
+
+```bash
+scripts/test-integration.sh
+```
+
+Run from the repo root. No arguments needed. Takes roughly 45–60 seconds.
+
+**What it does:**
+1. Starts `backend` and `mosquitto` via Docker Compose (integration override)
+2. Seeds the database (`npm run data:import`)
+3. Runs the simulator for 30 s with accelerated timing (telemetry every 2 s)
+4. Logs in as `admin@harvey.local` and queries `/api/v1/gardenBed/data`
+5. Exits 0 if at least one telemetry record is found; exits 1 otherwise
+6. Tears down the stack on exit regardless of pass/fail
+
+**Passing output ends with:**
+```
+==> Telemetry records found: <N>
+PASS: Integration test passed
+```
+
 ---
 
 ## Firmware Compile Check
 
-> Placeholder — will be documented in Phase 7.
+Build the PlatformIO image and compile the firmware without hardware:
+
+```bash
+docker build -t harvey-esp32-build nodes/esp32/
+cp nodes/esp32/include/LocalConfig.h.example nodes/esp32/include/LocalConfig.h
+docker run --rm -v $(pwd)/nodes/esp32:/workspace harvey-esp32-build pio run
+```
+
+A successful compile prints `[SUCCESS]` for the `esp32dev` environment. `LocalConfig.h` is gitignored — copy the example file before running so the build can find it.

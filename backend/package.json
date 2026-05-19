@@ -1,0 +1,47 @@
+{
+  "name": "harvey-backend",
+  "version": "1.0.0",
+  "description": "backend api to handle communication of data and tasks between frond end and nodes of Harvey",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server",
+    "dev": "nodemon src/server",
+    "data:import": "node src/seeder.js -i",
+    "data:delete": "node src/seeder.js -d",
+    "test": "mocha \"test/**/**/*.test.js\" --exit --timeout 10000",
+    "test:action": "mocha \"test/**/**/*action*.test.js\" --exit --timeout 10000",
+    "test:gardenBed": "mocha \"test/**/**/*gardenBed*.test.js\" --exit --timeout 10000",
+    "test:gardenStatus": "mocha \"test/**/**/*gardenStatus*.test.js\" --exit --timeout 10000",
+    "test:middleware": "mocha \"test/**/middleware/*.test.js\" --exit --timeout 10000",
+    "test:node": "mocha \"test/**/**/*node*.test.js\" --exit --timeout 10000",
+    "test:pump": "mocha \"test/**/**/*pump*.test.js\" --exit --timeout 10000",
+    "test:solenoid": "mocha \"test/**/**/*solenoid*.test.js\" --exit --timeout 10000",
+    "test:user": "mocha \"test/**/**/*user*.test.js\" --exit --timeout 10000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajisrael/harvey-backend.git"
+  },
+  "author": "ajisrael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ajisrael/harvey-backend/issues"
+  },
+  "homepage": "https://github.com/ajisrael/harvey-backend#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^7.5.3",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "path": "^0.12.7"
+  },
+  "type": "module",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.16",
+    "sinon": "^14.0.0"
+  }
+}

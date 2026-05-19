@@ -19,9 +19,12 @@ harvey-garden-automation/
 
 ### Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/) and Docker Compose
-- [Node.js](https://nodejs.org/) 20+ (for local backend development)
-- [PlatformIO](https://platformio.org/) (for ESP32 firmware — or use the Docker build)
+| Tool | Docs | Install | Notes |
+|------|------|---------|-------|
+| Docker | [Docker Desktop](https://docs.docker.com/desktop/) · [Engine (Linux)](https://docs.docker.com/engine/install/) | Bundled with Docker Desktop | Required to run all services |
+| Docker Compose | [Install docs](https://docs.docker.com/compose/install/) | Bundled with Docker Desktop; [Compose plugin](https://docs.docker.com/compose/install/linux/) for Linux | Required to run all services |
+| Node.js 20+ | [nodejs.org](https://nodejs.org/en/download/) · [nvm](https://github.com/nvm-sh/nvm) | `nvm install 20` | Local backend development only |
+| PlatformIO Core | [Install docs](https://docs.platformio.org/en/latest/core/installation/index.html) | `pip install platformio` | ESP32 firmware only — or use the Docker build |
 
 ### Environment Setup
 

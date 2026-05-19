@@ -23,6 +23,10 @@ unsigned long apiCallDelay = 60000;  // Delay between calls to API
 #include "HttpHelper.h"
 #include "NodeConfigHelper.h"
 
+void connectToNetwork();
+void login();
+void sendGardenBedData(String bedId);
+
 void setup() {
   Serial.begin(115200);
   connectToNetwork();

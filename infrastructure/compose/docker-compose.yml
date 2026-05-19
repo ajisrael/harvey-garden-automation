@@ -52,6 +52,15 @@ services:
       - mosquitto-data:/mosquitto/data
       - mosquitto-log:/mosquitto/log
 
+  firmware-build:
+    build:
+      context: ../../nodes/esp32
+    volumes:
+      - ../../nodes/esp32:/workspace
+    profiles:
+      - firmware
+    command: ["pio", "run"]
+
 volumes:
   harvey-db:
   backend-test-db:

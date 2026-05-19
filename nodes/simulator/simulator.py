@@ -4,10 +4,14 @@ import os
 import random
 import signal
 import time
+from pathlib import Path
 
 import httpx
+import jsonschema
 
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://backend:5000")
+_default_schema_dir = Path(__file__).parent.parent / "shared" / "schemas"
+SCHEMA_DIR = Path(os.environ.get("SCHEMA_DIR", _default_schema_dir))
 NODE_ID = os.environ.get("NODE_ID", "ESP32_01")
 LOGIN_EMAIL = os.environ.get("LOGIN_EMAIL", "node@harvey.local")
 LOGIN_PASSWORD = os.environ.get("LOGIN_PASSWORD", "change-me")
@@ -32,6 +36,27 @@ HUMIDITY_MAX = float(os.environ.get("HUMIDITY_MAX", 0.90))
 
 token = None
 shutdown = asyncio.Event()
+schemas = {}
+
+
+def load_schemas():
+    names = ["login-request", "telemetry-request"]
+    for name in names:
+        path = SCHEMA_DIR / f"{name}.json"
+        with open(path) as f:
+            schemas[name] = json.load(f)
+    log("schemas_loaded", schemas=names)
+
+
+def validate_payload(schema_name: str, payload: dict) -> bool:
+    schema = schemas.get(schema_name)
+    if schema is None:
+        return True
+    errors = list(jsonschema.Draft7Validator(schema).iter_errors(payload))
+    if errors:
+        log("schema_validation_error", schema=schema_name, errors=[e.message for e in errors])
+        return False
+    return True
 
 
 def log(event: str, **kwargs):
@@ -64,11 +89,15 @@ async def login_loop():
                 break
         first = False
 
+        login_payload = {"email": LOGIN_EMAIL, "password": LOGIN_PASSWORD}
+        if not validate_payload("login-request", login_payload):
+            continue
+
         async def do_login():
             async with httpx.AsyncClient() as client:
                 resp = await client.post(
                     f"{BACKEND_URL}/api/v1/users/login",
-                    json={"email": LOGIN_EMAIL, "password": LOGIN_PASSWORD},
+                    json=login_payload,
                     timeout=10,
                 )
                 resp.raise_for_status()
@@ -132,6 +161,9 @@ async def telemetry_loop():
                     "humidity": round(random.uniform(HUMIDITY_MIN, HUMIDITY_MAX), 4),
                 }
 
+                if not validate_payload("telemetry-request", payload):
+                    continue
+
                 async def do_telemetry(p=payload):
                     async with httpx.AsyncClient() as client:
                         resp = await client.post(
@@ -149,6 +181,7 @@ async def telemetry_loop():
 
 
 async def main():
+    load_schemas()
     loop = asyncio.get_running_loop()
     loop.add_signal_handler(signal.SIGTERM, shutdown.set)
 

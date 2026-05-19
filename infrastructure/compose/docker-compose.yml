@@ -40,6 +40,10 @@ services:
       context: ../../nodes/simulator
     env_file:
       - ../../nodes/simulator/.env
+    environment:
+      - SCHEMA_DIR=/shared/schemas
+    volumes:
+      - ../../nodes/shared:/shared:ro
     depends_on:
       backend:
         condition: service_healthy

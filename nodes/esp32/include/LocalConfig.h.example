@@ -4,5 +4,5 @@
 const char* ssid         = "your-wifi-ssid";
 const char* wifiPassword = "your-wifi-password";
 const String serverName  = "http://192.168.1.100:5000";
-const String loginEmail  = "node@harvey.local";
+const String loginEmail  = "node@harvey.io";
 const String loginPassword = "change-me";

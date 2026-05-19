@@ -25,7 +25,7 @@ const users = [
   },
   {
     name: 'Harvey Node',
-    email: 'node@harvey.local',
+    email: 'node@harvey.io',
     password: 'change-me',
     isAdmin: 0,
   },

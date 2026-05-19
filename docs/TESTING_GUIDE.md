@@ -87,7 +87,44 @@ docker compose -f infrastructure/compose/docker-compose.yml down -v
 
 ## Simulator Integration Tests
 
-> Placeholder — will be documented in Phase 3.
+Start the full stack with accelerated simulator timing:
+
+```bash
+docker compose \
+  -f infrastructure/compose/docker-compose.yml \
+  -f infrastructure/compose/docker-compose.integration.yml \
+  up --build
+```
+
+The backend must reach healthy status before the simulator starts. Watch for these log events from the `node-simulator` container:
+
+- `{"event": "login_ok", ...}` — simulator authenticated; JWT obtained
+- `{"event": "telemetry_sent", "bed_id": "Bed_0", ...}` — sensor data posted for a bed
+- `{"event": "config_updated", ...}` — simulator received and applied delay values from the backend
+
+With the integration override, telemetry arrives every 2 s and config is polled every 10 s (vs 5 s / 60 s in base config).
+
+### Verify telemetry was stored
+
+Query the running backend from another terminal:
+
+```bash
+curl -s http://localhost:5000/api/v1/gardenBed/data \
+  -H "Authorization: Bearer <token>" | jq .
+```
+
+Or exec into the backend container and query SQLite directly:
+
+```bash
+docker compose -f infrastructure/compose/docker-compose.yml exec backend \
+  sh -c 'sqlite3 /app/data/harvey.db "SELECT * FROM gardenBedData ORDER BY id DESC LIMIT 10;"'
+```
+
+### Tear down
+
+```bash
+docker compose -f infrastructure/compose/docker-compose.yml down -v
+```
 
 ---
 

@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+  node-simulator:
+    environment:
+      - API_CALL_DELAY_MS=2000
+      - CONFIG_UPDATE_DELAY_MS=10000
+      - LOGIN_DELAY_MS=60000

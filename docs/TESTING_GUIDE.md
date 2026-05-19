@@ -87,6 +87,22 @@ docker compose -f infrastructure/compose/docker-compose.yml down -v
 
 ## Simulator Integration Tests
 
+### Prerequisites
+
+The simulator authenticates as `node@harvey.local`. Seed the database before starting the stack:
+
+```bash
+# Inside the backend container (if already running):
+docker compose -f infrastructure/compose/docker-compose.yml exec backend npm run data:import
+
+# Or locally:
+cd backend && npm run data:import
+```
+
+The default node password is `change-me` — matches `LOGIN_PASSWORD` in `nodes/simulator/.env.example`.
+
+### Start the full stack
+
 Start the full stack with accelerated simulator timing:
 
 ```bash

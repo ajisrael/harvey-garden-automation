@@ -23,6 +23,12 @@ const users = [
     password: '1234567!',
     isAdmin: 1,
   },
+  {
+    name: 'Harvey Node',
+    email: 'node@harvey.local',
+    password: 'change-me',
+    isAdmin: 0,
+  },
 ];
 
 export default users;

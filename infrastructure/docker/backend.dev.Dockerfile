@@ -9,6 +9,8 @@ RUN npm ci
 
 COPY src ./src
 COPY test ./test
+COPY .env* ./
+RUN test -f .env || cp .env.example .env
 
 RUN mkdir -p /app/data
 

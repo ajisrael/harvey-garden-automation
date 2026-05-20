@@ -9,7 +9,7 @@ echo "==> Starting stack..."
 $COMPOSE up -d backend mosquitto
 
 echo "==> Seeding database..."
-$COMPOSE run --rm backend npm run data:import
+$COMPOSE run --rm backend npm run data:reset
 
 echo "==> Starting simulator (30s run)..."
 $COMPOSE run --rm \
@@ -21,7 +21,7 @@ $COMPOSE run --rm \
 echo "==> Querying backend for telemetry..."
 TOKEN=$(curl -s -X POST http://localhost:5000/api/v1/users/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@harvey.local","password":"adminpassword"}' \
+  -d '{"email":"admin@example.com","password":"1234567!"}' \
   | python3 -c "import sys,json; print(json.load(sys.stdin)['token'])")
 
 COUNT=$(curl -s http://localhost:5000/api/v1/gardenBed/data \

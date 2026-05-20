@@ -8,6 +8,7 @@
     "dev": "nodemon src/server",
     "data:import": "node src/seeder.js -i",
     "data:delete": "node src/seeder.js -d",
+    "data:reset": "node src/seeder.js -r",
     "test": "mocha \"test/**/**/*.test.js\" --exit --timeout 10000",
     "test:action": "mocha \"test/**/**/*action*.test.js\" --exit --timeout 10000",
     "test:gardenBed": "mocha \"test/**/**/*gardenBed*.test.js\" --exit --timeout 10000",

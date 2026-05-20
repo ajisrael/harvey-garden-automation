@@ -103,5 +103,8 @@ if (process.argv[2] === '-i') {
   tryToCreateTables();
   importData();
 }
+if (process.argv[2] === '-r') {
+  resetDB();
+}
 
 export { resetDB };
